@@ -1,0 +1,10 @@
+FROM {{image.base_os}}
+RUN  apt-get update \
+  && apt-get install -y wget openssh-server\
+  && rm -rf /var/lib/apt/lists/*
+RUN wget -O /usr/local/bin/dumb-init {{image.init_utility}}\
+    && chmod +x /usr/local/bin/dumb-init
+RUN groupadd --gid {{image.group_gid}} {{image.group_name}}
+RUN useradd -d /home/{{image.user_name}} -u {{image.user_uid}} -g {{image.group_name}} {{image.user_name}}
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+CMD ["bash", "-c", "mkdir /run/sshd && exec /usr/sbin/sshd"]

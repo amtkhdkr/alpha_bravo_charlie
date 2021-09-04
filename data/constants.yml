@@ -1,0 +1,27 @@
+image:
+  name: amt-test
+  base_os: ubuntu:focal
+  init_utility: https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
+  user_name: ansible
+  user_uid: 71000
+  group_name: ansible
+  group_gid: 71000
+  network_name: amt-test
+  apt_mirror:
+charlie:
+  hostname: charlie
+  rank: 3
+  ip_address: 172.16.100.142
+  inventory: west
+bravo:
+  hostname: bravo
+  rank: 2
+  ip_address: 172.16.100.141
+  inventory: east
+alpha:
+  hostname: alpha
+  rank: 1
+  ip_address: 172.16.100.140
+  inventory: east
+inventory:
+  names: [east, west]
