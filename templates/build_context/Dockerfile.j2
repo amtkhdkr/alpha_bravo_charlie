@@ -5,15 +5,20 @@ MAINTAINER Ameet Khedkar "https://github.com/amtkhdkr/alpha_bravo_charlie"
 RUN  apt-get update \
   && apt-get install -y wget openssh-server \
   && apt-get clean \
-  && rm -rf /var/lib/apt/lists/* tmp/* /var/tmp/* \
+  && rm -rf /tmp/* /var/tmp/* \
   && mkdir /run/sshd
-# Deny root login over SSH
-RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin no/' /etc/ssh/sshd_config
+
+# Allow root login over SSH, Don't allow password auth, set verbose log, disable PAM and start on port 22
+RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
+    && sed -ri 's/^#?PasswordAuthentication\s+.*/PasswordAuthentication no/' /etc/ssh/sshd_config \
+    && sed -ri 's/^#?LogLevel\s+.*/LogLevel VERBOSE/' /etc/ssh/sshd_config \
+    && sed -ri 's/^#?Port\s+.*/Port 22/' /etc/ssh/sshd_config \
+    && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 RUN wget -O /usr/local/bin/dumb-init {{image.init_utility}}\
     && chmod +x /usr/local/bin/dumb-init
 RUN groupadd --gid {{image.group_gid}} {{image.group_name}}
-RUN useradd -d /home/{{image.user_name}} -u {{image.user_uid}} -g {{image.group_name}} {{image.user_name}} \
-    && mkdir -p /home/{{image.user_name}}/.ssh
+RUN useradd -d /home/{{image.user_name}} -u {{image.user_uid}} -g {{image.group_name}} {{image.user_name}}
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+EXPOSE 22
 CMD ["bash", "-c", "exec /usr/sbin/sshd -D"]

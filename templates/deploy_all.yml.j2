@@ -55,4 +55,5 @@ networks:
       config:
         # For 64 hosts, use 32 - log(64,2) = 26 mask
         - subnet: {{network.prefix}}/26
+          ip_range: {{network.prefix}}/26
           gateway: {{network.gateway}}

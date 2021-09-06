@@ -1,0 +1,17 @@
+---
+- name: Set timezone in each users profile
+  ansible.builtin.shell: timedatectl set-timezone "{{ timezone }}"
+  # Avoid failing if required files are not present, we have alternate ways to enforce TZ
+  failed_when: false
+
+- name: Check for profile.d directory, if present
+  ansible.builtin.stat:
+    path: /etc/profile.d
+  register: profile_d
+
+- name: Add script to export TZ variable in profile.d, if present
+  ansible.builtin.copy:
+    dest: "{{profile_d}}/timezone.sh"
+    mode: "u=rwx,g=r,o=r"
+    content: "TZ={{ timezone}}; export TZ"
+  when: profile_d.stat.exists and profile_d.stat.isdir

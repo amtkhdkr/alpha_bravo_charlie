@@ -1,0 +1,9 @@
+- name: Remove the linked file which is present by default
+  ansible.builtin.file:
+    path: "/etc/motd"
+    state: absent
+
+- name: Change MOTD to a custom one
+  ansible.builtin.copy:
+    dest: "/etc/motd"
+    content: "{{ issue_msg }}"

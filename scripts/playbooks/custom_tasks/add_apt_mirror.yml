@@ -1,0 +1,4 @@
+- name: Add specified repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "{{ apt_mirror }}"
+    state: present

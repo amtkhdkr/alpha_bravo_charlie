@@ -1,0 +1,10 @@
+---
+- name: Setup the common changes for all containers
+  hosts: all
+  tasks:
+    - name: Add timezone to all machines
+      include_tasks: "custom_tasks/modify_timezone.yml"
+    - name: Add APT mirror to all machines
+      include_tasks: "custom_tasks/add_apt_mirror.yml"
+    - name: Add welcome message according to machine group
+      include_tasks: "custom_tasks/modify_ssh_welcome.yml"

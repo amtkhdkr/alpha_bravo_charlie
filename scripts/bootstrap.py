@@ -28,7 +28,7 @@ if __name__ == '__main__':
         if not os.environ.get('CONTI_DB_NAME'):
             raise EnvironmentError('“You must specify CONTI_DB_NAME in the environment.')
         else:
-            template_args['CONT_DB_NAME'] = os.environ.get('CONTI_DB_NAME')
+            template_args['CONTI_DB_NAME'] = os.environ.get('CONTI_DB_NAME')
         # Go through all the templates and replace them in data files
         for root, dirs, files in os.walk(templates_dir):
             for template in filter(lambda x: x.endswith('.j2'), files):
