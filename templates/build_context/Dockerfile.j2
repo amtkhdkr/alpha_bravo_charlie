@@ -1,0 +1,19 @@
+FROM {{image.base_os}}
+MAINTAINER Ameet Khedkar "https://github.com/amtkhdkr/alpha_bravo_charlie"
+
+# Install wget and SSH server, clean everything up, create folder for sshd
+RUN  apt-get update \
+  && apt-get install -y wget openssh-server \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* tmp/* /var/tmp/* \
+  && mkdir /run/sshd
+# Deny root login over SSH
+RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin no/' /etc/ssh/sshd_config
+
+RUN wget -O /usr/local/bin/dumb-init {{image.init_utility}}\
+    && chmod +x /usr/local/bin/dumb-init
+RUN groupadd --gid {{image.group_gid}} {{image.group_name}}
+RUN useradd -d /home/{{image.user_name}} -u {{image.user_uid}} -g {{image.group_name}} {{image.user_name}} \
+    && mkdir -p /home/{{image.user_name}}/.ssh
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+CMD ["bash", "-c", "exec /usr/sbin/sshd -D"]
