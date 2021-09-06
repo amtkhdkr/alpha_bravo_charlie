@@ -6,22 +6,23 @@ image:
   user_uid: 71000
   group_name: ansible
   group_gid: 71000
-  network_name: amt-test
-  apt_mirror:
-charlie:
-  hostname: charlie
-  rank: 3
-  ip_address: 172.16.100.142
-  inventory: west
-bravo:
-  hostname: bravo
-  rank: 2
-  ip_address: 172.16.100.141
-  inventory: east
+# Define the network characteristics
+network:
+  name: amt-test
+  prefix: 172.16.100.128
+  gateway: 172.16.100.129
+# Define each container's characteristics
 alpha:
   hostname: alpha
-  rank: 1
   ip_address: 172.16.100.140
   inventory: east
+bravo:
+  hostname: bravo
+  ip_address: 172.16.100.141
+  inventory: east
+charlie:
+  hostname: charlie
+  ip_address: 172.16.100.142
+  inventory: west
 inventory:
   names: [east, west]

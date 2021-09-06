@@ -1,0 +1,58 @@
+version: "2.4"
+
+services:
+  alpha:
+    container_name: alpha
+    hostname: alpha
+    image: {{image.name}}
+    build: build_context
+    networks:
+      {{network.name}}:
+        ipv4_address: {{alpha.ip_address}}
+    oom_score_adj: 500
+    ports:
+      - "49514:22"
+  bravo:
+    container_name: bravo
+    hostname: bravo
+    image: {{image.name}}
+    build: build_context
+    networks:
+      {{network.name}}:
+        ipv4_address: {{bravo.ip_address}}
+    depends_on:
+        - alpha
+    mem_limit: 4G
+    memswap_limit: -1
+    oom_score_adj: 500
+    ports:
+      - "49515:22"
+  charlie:
+    container_name: charlie
+    hostname: charlie
+    image: {{image.name}}
+    build: build_context
+    networks:
+      {{network.name}}:
+        ipv4_address: {{charlie.ip_address}}
+    volumes:
+        - .:/opt/data
+    environment:
+        CONTI_ENV: {{CONTI_ENV}}
+        CONTI_DB_NAME: {{CONTI_DB_NAME}}
+    cpus: 0.1
+    oom_score_adj: -1000
+    depends_on:
+        - bravo
+    ports:
+      - "49516:22"
+networks:
+  {{network.name}}:
+    name: {{network.name}}
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        # For 64 hosts, use 32 - log(64,2) = 26 mask
+        - subnet: {{network.prefix}}/26
+          gateway: {{network.gateway}}

@@ -1,4 +1,6 @@
-results
-rendered
+/logs/
+/build/
 **/*.pyc
 **/*.log
+.idea
+/venv/
