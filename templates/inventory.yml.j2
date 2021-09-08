@@ -1,0 +1,23 @@
+all:
+  hosts:
+    {{alpha.ip_address}}
+    {{bravo.ip_address}}
+    {{charlie.ip_address}}
+  vars:
+    timezone: {{timezone}}
+    apt_mirror: {{apt_repository}}
+    ansible_user: root
+    ansible_become: yes
+    ansible_become_user: {{image.user_name}}
+  children:
+    east:
+      vars:
+        issue_msg: {{east_issue_msg}}
+      hosts:
+        {{alpha.ip_address}}
+        {{bravo.ip_address}}
+    west:
+      vars:
+        issue_msg: {{west_issue_msg}}
+      hosts:
+        {{charlie.ip_address}}

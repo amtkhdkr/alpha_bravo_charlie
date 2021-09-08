@@ -3,7 +3,16 @@ A sample 3 container application which is provisioned and managed entirely using
 
 # How to run
 
-make up - Start all containers
+make up - Start all containers 
+
+ ###Python bootstrap script:
+
+- Makes sure that the [Jinja2 templates](https://jinja.palletsprojects.com/en/3.0.x/templates/) under the ./templates folder
+- These templates provide substitution to variables like container names, SSH welcome messages and so on. 
+  Example:
+`{{alpha.ip_address}}` translates to `172.16.100.140` which is defined in constants.yml
+
+- Ansible inventory is fully templated to ensure minimum hard-coding.
 
 make ansible - Provision and customize the containers
 

@@ -8,11 +8,13 @@ RUN  apt-get update \
   && rm -rf /tmp/* /var/tmp/* \
   && mkdir /run/sshd
 
-# Allow root login over SSH, Don't allow password auth, set verbose log, disable PAM and start on port 22
-RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
+# Allow root login over SSH, Allow publickey authentication,
+# Don't allow password auth, set verbose log, disable PAM and start on port 22
+RUN    sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
     && sed -ri 's/^#?PasswordAuthentication\s+.*/PasswordAuthentication no/' /etc/ssh/sshd_config \
     && sed -ri 's/^#?LogLevel\s+.*/LogLevel VERBOSE/' /etc/ssh/sshd_config \
     && sed -ri 's/^#?Port\s+.*/Port 22/' /etc/ssh/sshd_config \
+    && sed -ri 's/^#?PubkeyAuthentication\s+.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
     && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 RUN wget -O /usr/local/bin/dumb-init {{image.init_utility}}\

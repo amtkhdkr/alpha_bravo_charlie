@@ -15,14 +15,13 @@ network:
 alpha:
   hostname: alpha
   ip_address: 172.16.100.140
-  inventory: east
 bravo:
   hostname: bravo
   ip_address: 172.16.100.141
-  inventory: east
 charlie:
   hostname: charlie
   ip_address: 172.16.100.142
-  inventory: west
-inventory:
-  names: [east, west]
+timezone: Asia/Kolkata
+apt_repository: deb http://archive.canonical.com/ubuntu hardy partner
+west_issue_msg: Once upon a time in the west
+east_issue_msg: Eastern promises
